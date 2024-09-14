@@ -18,12 +18,14 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	Font infoFont;
 	Timer frameDraw;
 	Rocketship rocket;
+	ObjectManager object;
 	GamePanel() {
 		titleFont= new Font("Arial",Font.PLAIN,48);
 		infoFont= new Font("Arial",Font.PLAIN,24);
 		frameDraw= new Timer(1000/60,this);
 		frameDraw.start();
 		rocket=new Rocketship(250,700,50,50);
+		object= new ObjectManager(rocket);
 	}
 	@Override
 	public void paintComponent(Graphics g) {
@@ -59,7 +61,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
-		rocket.draw(g);
+		object.draw(g);
 	}
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
@@ -98,34 +100,35 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		}
 		if(arg0.getKeyCode()==KeyEvent.VK_UP) {
 			rocket.up();
-			if(rocket.y<=0) {
-				rocket.y=0;
-			}
 			System.out.println("UP");
 		}
-		if(arg0.getKeyCode()==KeyEvent.VK_DOWN) {
+		else if(arg0.getKeyCode()==KeyEvent.VK_DOWN) {
 			rocket.down();
-			if(rocket.y>=LeagueInvaders.HEIGHT) {
-				rocket.y=LeagueInvaders.HEIGHT;
-			}
 			System.out.println("DOWN");
 		}
-		if(arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
+		else if(arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
 			rocket.right();
-			if(rocket.x>=LeagueInvaders.WIDTH) {
-				rocket.x=LeagueInvaders.WIDTH;
-			}
 			System.out.println("RIGHT");
 		}
-		if(arg0.getKeyCode()==KeyEvent.VK_LEFT) {
+		else if(arg0.getKeyCode()==KeyEvent.VK_LEFT) {
 			rocket.left();
-			if(rocket.y<=0) {
-				rocket.y=0;
-			}
 			System.out.println("LEFT");
 		}
-		
+		if(rocket.y>LeagueInvaders.HEIGHT) {
+			rocket.y=LeagueInvaders.HEIGHT;
+		}
+		else if(rocket.y<0) {
+			rocket.y=0;
+		}
+		if(rocket.x>LeagueInvaders.WIDTH) {
+			rocket.x=LeagueInvaders.WIDTH;
+		}
+		else if(rocket.x<0) {
+			rocket.x=0;
+		}
 	}
+		
+	
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
