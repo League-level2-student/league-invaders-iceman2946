@@ -22,6 +22,9 @@ public class Rocketship extends GameObject {
 			g.fillRect(x,y,width,height);
 		}
 	}
+	void update() {
+		super.update();
+	}
 	public void up() {
 		y-=speed;
 	}

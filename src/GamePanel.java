@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	Timer alienSpawn;
 	GamePanel() {
 		titleFont= new Font("Arial",Font.PLAIN,48);
-		infoFont= new Font("Arial",Font.PLAIN,24);
+		infoFont= new Font("Comic Sans",Font.PLAIN,24);
 		frameDraw= new Timer(1000/60,this);
 		frameDraw.start();
 		rocket=new Rocketship(250,700,50,50);
@@ -64,6 +64,11 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	}
 	void updateGameState() {
 		object.update();
+		if(rocket.isActive==false) {
+			currentState=END;
+			rocket= new Rocketship(250,700,50,50);
+			object= new ObjectManager(rocket);
+		}
 	}
 	void updateEndState() {
 		
@@ -83,15 +88,18 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 			g.drawImage(image,0,0,LeagueInvaders.WIDTH,LeagueInvaders.HEIGHT,null);
 		}
 		object.draw(g);
+		g.setColor(Color.GREEN);
+		g.setFont(infoFont);
+		g.drawString("Score: "+object.getScore(),10,20);
 	}
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
 		g.setColor(Color.BLACK);
 		g.setFont(titleFont);
-		g.drawString("Game Over", 50, 120);
+		g.drawString("Game Over", 60, 120);
 		g.setFont(infoFont);
-		g.drawString("You killed ____ enemies", 125, 300);
+		g.drawString("You killed "+object.getScore()+" enemies", 125, 300);
 		g.drawString("Press ENTER to restart", 80, 500);
 	}
 	void startGame(int milliseconds,ActionListener object) {
@@ -111,7 +119,6 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 			updateEndState();
 			
 		}
-		System.out.println("action");
 		repaint();
 		
 	}
@@ -128,6 +135,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 			else if(currentState==GAME) {
 				currentState=END;
 				alienSpawn.stop();
+				
 			}
 			else {
 				currentState ++;
@@ -153,16 +161,16 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 			System.out.println("LEFT");
 		}
 		if(rocket.y>LeagueInvaders.HEIGHT-rocket.height) {
-			rocket.y=LeagueInvaders.HEIGHT-10;
+			rocket.y=LeagueInvaders.HEIGHT-rocket.height;
 		}
 		else if(rocket.y<0+rocket.height) {
-			rocket.y=0;
+			rocket.y=0+rocket.width;
 		}
 		if(rocket.x>LeagueInvaders.WIDTH-rocket.width) {
-			rocket.x=LeagueInvaders.WIDTH-10;
+			rocket.x=LeagueInvaders.WIDTH-rocket.width;
 		}
 		else if(rocket.x<0+rocket.width) {
-			rocket.x=0;
+			rocket.x=0+rocket.width;
 		}
 	}
 		
