@@ -6,11 +6,15 @@ import javax.imageio.ImageIO;
 
 public class Rocketship extends GameObject {
 	public static BufferedImage image;
-	public static boolean needImage= true;
-	public static boolean gotImage=false;
+	public static boolean needImage = true;
+	public static boolean gotImage =false;
+	boolean movingRight = false;
+	boolean movingLeft = false;
+	boolean movingUp = false;
+	boolean movingDown = false;
 	Rocketship(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed=50;
+		speed=10;
 		loadImage("rocket.png");
 	}
 	void draw(Graphics g) {
@@ -24,6 +28,18 @@ public class Rocketship extends GameObject {
 	}
 	void update() {
 		super.update();
+		if(movingRight) {
+			right();
+		}
+		if(movingLeft) {
+			left();
+		}
+		if(movingUp) {
+			up();
+		}
+		if(movingDown) {
+			down();
+		}
 	}
 	public void up() {
 		y-=speed;
@@ -52,3 +68,4 @@ public class Rocketship extends GameObject {
 		}
 	}
 }
+

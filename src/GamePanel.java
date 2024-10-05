@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -24,6 +25,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
+	int score= 0;
 	Timer alienSpawn;
 	GamePanel() {
 		titleFont= new Font("Arial",Font.PLAIN,48);
@@ -67,6 +69,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		if(rocket.isActive==false) {
 			currentState=END;
 			rocket= new Rocketship(250,700,50,50);
+			score=object.getScore();
 			object= new ObjectManager(rocket);
 		}
 	}
@@ -99,7 +102,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		g.setFont(titleFont);
 		g.drawString("Game Over", 60, 120);
 		g.setFont(infoFont);
-		g.drawString("You killed "+object.getScore()+" enemies", 125, 300);
+		g.drawString("You killed "+score+" enemies", 125, 300);
 		g.drawString("Press ENTER to restart", 80, 500);
 	}
 	void startGame(int milliseconds,ActionListener object) {
@@ -141,24 +144,23 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 				currentState ++;
 			}
 		}
+		if(arg0.getKeyCode()==KeyEvent.VK_SPACE&& currentState==MENU) {
+			JOptionPane.showMessageDialog(null, "Use arrow keys to move. Press SPACE to fire. Try not to die");
+		}
 		if(arg0.getKeyCode()==KeyEvent.VK_SPACE&& currentState==GAME) {
 			object.addProjectile(rocket.getProjectile());
 		}
 		if(arg0.getKeyCode()==KeyEvent.VK_UP) {
-			rocket.up();
-			System.out.println("UP");
+			rocket.movingUp=true;
 		}
 		else if(arg0.getKeyCode()==KeyEvent.VK_DOWN) {
-			rocket.down();
-			System.out.println("DOWN");
+			rocket.movingDown=true;
 		}
 		else if(arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
-			rocket.right();
-			System.out.println("RIGHT");
+			rocket.movingRight=true;
 		}
 		else if(arg0.getKeyCode()==KeyEvent.VK_LEFT) {
-			rocket.left();
-			System.out.println("LEFT");
+			rocket.movingLeft=true;
 		}
 		if(rocket.y>LeagueInvaders.HEIGHT-rocket.height) {
 			rocket.y=LeagueInvaders.HEIGHT-rocket.height;
@@ -177,7 +179,19 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 	
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		if(arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
+			rocket.movingRight=false;
+		}
+		if(arg0.getKeyCode()== KeyEvent.VK_LEFT) {
+			rocket.movingLeft=false;
+		}
+		if(arg0.getKeyCode()== KeyEvent.VK_UP) {
+			rocket.movingUp=false;
+		}
+		if(arg0.getKeyCode()== KeyEvent.VK_DOWN) {
+			rocket.movingDown=false;
+		}
+		
 		
 	}
 	@Override
@@ -185,4 +199,4 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener {
 		// TODO Auto-generated method stub
 		
 	}
-}
+}                                   
